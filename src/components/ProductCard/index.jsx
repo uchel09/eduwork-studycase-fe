@@ -1,140 +1,115 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "../../styles/style";
 import ProductDetailsCard from "./ProductDetailsCard";
-import {
-  AiFillHeart,
-  AiFillStar,
-  AiOutlineEye,
-  AiOutlineHeart,
-  AiOutlineShoppingCart,
-  AiOutlineStar,
-} from "react-icons/ai";
+import { AiFillStar } from "react-icons/ai";
+import WishListButton from "../Button/WishListButton";
+import CartButton from "../Button/CartButton";
+import { IoTrashBinOutline } from "react-icons/io5";
+import { PriceFormat } from "../../utils/priceFormat";
 
-const ProductCard = ({ productData }) => {
+const ProductCard = ({
+  product,
+  admin = false,
+  setOpenDelete,
+  setDeleteId = "",
+}) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <div className="relative w-full h-[400px]   bg-white rounded-lg shadow-md p-3 mb-2 cursor-pointer">
-        <div className="flex justify-end"></div>
-        <Link to={`/products/${productData.id}`}>
+      <div
+        className={`relative w-[190px] 
+      flex flex-col items-start h-[330px]
+    bg-white rounded-lg 
+      shadow-md  mb-2 cursor-pointer`}
+      >
+        <Link to={`/products/${product?._id}`}>
           <img
-            src={`${productData.image_Url[0].url}`}
+            src={`${product?.images[0]?.image_url}`}
             alt=""
-            className="w-11/12 h-[170px] object-contain"
+            className="w-[full] h-[200px] object-contain"
           />
         </Link>
-        <Link to={``}>
-          <h5 className={`${styles.shop_name}`}>{productData.shop.name}</h5>
-        </Link>
-        <Link to={`/products/${productData.id}`}>
-          <h4 className="pb-3 font-[500] text-[14px] 600px:text-[16px]">
-            {productData.name.length > 40
-              ? productData.name.slice(0, 40) + "..."
-              : productData.name}
-          </h4>
-          {/* star  */}
-          <div className="flex">
-            <AiFillStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            />
-            <AiFillStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            />
-            <AiFillStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            />
-            <AiFillStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            />
-            <AiOutlineStar
-              size={20}
-              className="mr-2 cursor-pointer"
-              color="#F6BA00"
-            />
-          </div>
-          {/* price  */}
-          <div className="py-2 flex items-start justify-between w-full">
-            <div className="flex flex-col">
-              <h4 className={`${styles.price}`}>
-                {productData.price
-                  ? new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
-                    }).format(productData.price)
-                  : null}
-              </h4>
 
-              <h5 className={`${styles.productDiscountPrice}`}>
-                {productData.price === 0
-                  ? new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    }).format(productData.price)
-                  : new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
-                    }).format(productData.discount_price)}
-              </h5>
-              <span className="font-[400] text-[17px] text-[#68d284]">
-                sold {productData.total_sell}
-              </span>
-            </div>
-          </div>
+        {/* name  */}
+        <h4 className="px-1 h-[45px] font-[500] text-[12px] 600px:text-[16px]">
+          {product?.name.length > 40
+            ? product?.name.slice(0, 40) + "..."
+            : product?.name}
+        </h4>
+        {/* name  */}
 
-          {/* icon cart, view and wishlist */}
-        </Link>
-        <div>
-          {click ? (
-            <AiFillHeart
-              size={22}
-              className="cursor-pointer absolute right-2 top-5"
-              onClick={() => setClick(!click)}
-              color={click ? "red" : "#333"}
-              title="Remove from wishlist"
-            />
-          ) : (
-            <AiOutlineHeart
-              size={22}
-              className="cursor-pointer absolute right-2 top-5"
-              onClick={() => setClick(!click)}
-              color={click ? "red" : "#333"}
-              title="Add from wishlist"
-            />
-          )}
-          <AiOutlineEye
-            size={22}
-            className="cursor-pointer absolute right-2 top-14"
-            onClick={() => {
-              setOpen(!open);
-            }}
-            color="#333"
-            title="See details"
-          />
-          <AiOutlineShoppingCart
-            size={25}
-            className="cursor-pointer absolute right-2 top-24"
-            color="#444"
-            title="Add to Cart"
-          />
-          {open && (
-            <ProductDetailsCard setOpen={setOpen} productData={productData} />
-          )}
+        {/* price  */}
+        <div className="px-1 flex items-start justify-between w-full mt-[10px]">
+          <div className="flex flex-col">
+            <h4 className={`font-bold text-[16px]`}>
+              {product?.price ? PriceFormat(product?.price) : null}
+            </h4>
+          </div>
         </div>
+        {/* price  */}
+
+        {/* star and sold  */}
+
+        <div className="px-1 mt-[2px]">
+          <div className="flex items-center gap-1">
+            <AiFillStar className="text-yellow-500 text-[18px]" />
+            <span className="text-[14px] text-slate-400">
+              4.7 | 300+ terjual
+            </span>
+          </div>
+        </div>
+        {/* star and sold  */}
+
+        {/* icon cart, view and wishlist */}
+        {admin ? (
+          <div>
+            <IoTrashBinOutline
+              onClick={() => {
+                setOpenDelete(true);
+                setDeleteId(product._id);
+              }}
+              className="cursor-pointer text-red-500 text-[20px] hover:text-[24px] absolute right-[2px] bottom-[2px]"
+            />
+          </div>
+        ) : (
+          <div>
+            <WishListButton click={click} setClick={setClick} />
+            <CartButton setOpen={setOpen} />
+          </div>
+        )}
+
+        {open && <ProductDetailsCard setOpen={setOpen} product={product} />}
+      </div>
+    </>
+  );
+};
+
+ProductCard.Skeleton = function ProductCardSkeleton() {
+  return (
+    <>
+      <div
+        className={`relative w-[190px] 
+      flex flex-col items-start h-[330px]
+    bg-white rounded-lg 
+      shadow-md  mb-2 cursor-pointer`}
+      >
+        <div className="w-[179px] mx-auto rounded-lg bg-[#d7d5d5] h-[200px] animate-pulse overflow-hidden"></div>
+
+        <h4 className="px-1 h-[20px] mt-4 ml-2 w-[170px] bg-[#d7d5d5] animate-pulse rounded-md 600px:text-[16px]"></h4>
+        {/* name  */}
+
+        {/* price  */}
+        <div className="px-1 flex items-start justify-between w-full mt-[10px] rounded-md"></div>
+        {/* price  */}
+
+        {/* star and sold  */}
+
+        <div className="px-1 mt-[2px] w-[150px] h-3 ml-2 bg-[#d7d5d5] animate-pulse"></div>
+        {/* star and sold  */}
+        <div className="w-[25px] rounded-md h-[25px] absolute right-[10px] bottom-[10px] bg-[#d7d5d5] animate-pulse  "></div>
+        <div className="w-[25px] h-[25px] rounded-md absolute right-[50px] bottom-[10px] bg-[#d7d5d5] animate-pulse  "></div>
       </div>
     </>
   );

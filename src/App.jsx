@@ -1,58 +1,83 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import {
   LoginPage,
   SignUp,
-  ActivationPage,
   HomePage,
   ProductPage,
   ProductIdPage,
-  BestSellingPage,
-  EventsPage,
-  FAQPage,
+  ProfilePage,
+  ProfileAddress,
+  ProfileOrder,
+  Checkout,
+  Invoice,
 } from "./routes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
+
+import AdminPage from "./pages/admin";
+import ProductsPage from "./pages/admin/products";
+import UsersListPage from "./pages/admin/users";
+import { useDispatch, useSelector } from "react-redux";
+import { RefreshToken, getUserAddresses } from "./store/actions/authAct";
 import { useEffect } from "react";
-import { loadUser } from "./store/actions/user";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import { setAuthenticated } from "./store/slice/user";
+
+import { getCArt } from "./store/actions/cart";
+import { SetCategoriesAndTags } from "./store/actions/componentAct";
 
 function App() {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.user);
   useEffect(() => {
-    const storedToken = localStorage.getItem("accessToken");
+    const fetchData = async () => {
+      await dispatch(RefreshToken());
+    };
 
-    if (storedToken) {
-      // Jika ada token yang tersimpan, atur isAuthenticated menjadi true
-      dispatch(setAuthenticated(true));
-      axios.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
+    fetchData();
+  }, [dispatch]);
+
+  
+
+  const { user, token } = useSelector((state) => state.auth);
+  // get cAtegory dan tag
+  useEffect(() => {
+    dispatch(SetCategoriesAndTags());
+  });
+  // get keranjang
+
+  const cartItems = localStorage.getItem("cartItems");
+  useEffect(() => {
+    if (user && token && !cartItems) {
+      dispatch(getCArt());
     }
-    if (isAuthenticated) {
-      dispatch(loadUser());
+  }, []);
+  useEffect(() => {
+    if (token) {
+      dispatch(getUserAddresses(token));
     }
-  }, [dispatch, isAuthenticated]);
+  }, [token]);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/products/:id" element={<ProductIdPage />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route
-          path="/activation/:activationToken"
-          element={<ActivationPage />}
-        />
         <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/products" element={<ProductPage />} />
-        <Route path="/best-selling" element={<BestSellingPage />} />
-        <Route path="/events" element={<EventsPage />} />
-        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/invoice/:id" element={<Invoice />} />
+
+        {/* ============= Admin ================== */}
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/products" element={<ProductsPage />} />
+        <Route path="/admin/users-list" element={<UsersListPage />} />
+        {/* //================User profile =========== */}
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/address" element={<ProfileAddress />} />
+        <Route path="/profile/orders" element={<ProfileOrder />} />
       </Routes>
       <ToastContainer
-        position="bottom-center"
+        position="top-right"
         autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -61,8 +86,6 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="black"
-        style={{ color: "black" }}
       />
     </BrowserRouter>
   );

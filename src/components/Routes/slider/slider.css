@@ -1,0 +1,50 @@
+.carousel-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0 auto;
+  position: relative;
+}
+.carousel-container .controls {
+  display: flex;
+  margin-top: 50px;
+  gap: 20px;
+}
+.carousel-container .controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.carousel .slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel .carousel-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px; /* Tambahkan margin horizontal antar gambar */
+}
+
+.carousel .carousel-item .carousel-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.carousel .control-dots {
+  bottom: -30px; /* Atur posisi dot kontrol sesuai kebutuhan */
+}

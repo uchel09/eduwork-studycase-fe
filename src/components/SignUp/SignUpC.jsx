@@ -1,57 +1,33 @@
 import { useState } from "react";
 import styles from "../../styles/style";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { RxAvatar } from "react-icons/rx";
+
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { server } from "../../server";
-import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { Register } from "../../store/actions/authAct";
+
 
 function SignUpC() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [visible, setVisible] = useState(true);
-  const [avatar, setAvatar] = useState(null);
+
+  const dispatch = useDispatch();
+  const { loadAuth } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    setAvatar(file);
-  };
-  const handleSubmit = (e) => {
+  const [fullname, setFullname] = useState("");
+  const [visible, setVisible] = useState(true);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
-    const newForm = new FormData();
-    newForm.append("name", name);
-    newForm.append("email", email);
-    newForm.append("password", password);
-    newForm.append("role", "user");
-    newForm.append("avatar", avatar);
-    axios
-      .post(`${server}/users`, newForm, config)
-      .then((res) => {
-        alert(res.data.message);
-        if (res.data.success === true) {
-          setName("");
-          setEmail("");
-          setPassword("");
-          setAvatar(null);
-          navigate("/login");
-        }
-        toast("check your email to confirm");
-      })
-
-      .catch((err) => {
-        toast.error(err.response);
-        // window.location.reload();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    const success = await dispatch(Register({ fullname, email, password }));
+    if (success) {
+      navigate("/login");
+    }
+    setFullname("");
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -78,8 +54,8 @@ function SignUpC() {
                   placeholder="johndoe"
                   autoComplete="name"
                   required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={fullname}
+                  onChange={(e) => setFullname(e.target.value)}
                   className={styles.authInput}
                 />
               </div>
@@ -139,45 +115,11 @@ function SignUpC() {
             </div>
 
             <div>
-              <label
-                htmlFor="avatar"
-                className="block text-sm font-medium text-gray-700"
-              ></label>
-              <div className="mt-2 flex items-center">
-                <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
-                  {avatar ? (
-                    <img
-                      src={URL.createObjectURL(avatar)}
-                      alt="avatar"
-                      className="h-full w-full object-cover rounded-full"
-                    />
-                  ) : (
-                    <RxAvatar className="w-8 h-8" />
-                  )}
-                </span>
-                <label
-                  htmlFor="file-input"
-                  className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100"
-                >
-                  <span>Upload a file</span>
-                  <input
-                    type="file"
-                    name="avatar"
-                    id="file-input"
-                    accept=".jpg,.jpeg,.png"
-                    className="sr-only"
-                    onChange={handleFileInputChange}
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div>
               <button
                 type="submit"
                 className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
-                {loading ? "Submitting..." : "Submit"}
+                {loadAuth ? "Submitting..." : "Submit"}
               </button>
             </div>
             <div className={`${styles.normalFlex} w-full`}>

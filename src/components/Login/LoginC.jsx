@@ -2,11 +2,9 @@ import { useState } from "react";
 import styles from "../../styles/style";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { server } from "../../server";
-import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setAuthenticated } from "../../store/slice/user";
+
+import { Login } from "../../store/actions/authAct";
 
 function LoginC() {
   const navigate = useNavigate();
@@ -17,34 +15,13 @@ function LoginC() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await axios.post(
-        `${server}/users/login`,
-        { email, password },
-        { withCredentials: true }
-      );
-
-      toast.success(response.data.message);
-
-      if (response.data.data.accessToken) {
-        const token = response.data.data.accessToken;
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        localStorage.setItem("accessToken", token);
-        setTimeout(function () {
-          // Ganti URL dengan halaman yang ingin Anda tuju
-          navigate("/");
-          window.location.reload();
-        }, 2000);
-        dispatch(setAuthenticated(true));
-      } else {
-        throw new Error("Tidak Ada Token");
-      }
-    } catch (error) {
-      toast.error(error.response.data.message);
-      console.log(error);
-      navigate("/login");
+    const success = await dispatch(Login({ email, password }));
+    if (success) {
+      localStorage.setItem("myLogin", "true");
+      navigate("/");
     }
+    setEmail("");
+    setPassword("");
   };
 
   return (

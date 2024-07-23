@@ -1,20 +1,23 @@
 import LoginPage from "./pages/LoginPage";
 import SignUp from "./pages/SignUp";
-import ActivationPage from "./pages/Activation";
 import HomePage from "./pages/Home";
 import ProductPage from "./pages/ProductPage";
 import ProductIdPage from "./pages/ProductIdPage";
-import BestSellingPage from "./pages/BestSellingPage";
-import FAQPage from "./pages/FAQPage";
-import EventsPage from "./pages/EventsPage";
+import Checkout from "./pages/Checkout";
+import ProfilePage from "./pages/profile";
+import ProfileAddress from "./pages/profile/address";
+import ProfileOrder from "./pages/profile/order";
+import Invoice from "./pages/Invoice";
+
 export {
   LoginPage,
   SignUp,
-  ActivationPage,
   HomePage,
   ProductPage,
   ProductIdPage,
-  BestSellingPage,
-  FAQPage,
-  EventsPage,
+  ProfilePage,
+  ProfileAddress,
+  ProfileOrder,
+  Checkout,
+  Invoice
 };

@@ -2,6 +2,7 @@ import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/style";
 import { BsCartPlus } from "react-icons/bs";
 import { AiOutlineHeart } from "react-icons/ai";
+import {motion} from "framer-motion"
 
 const Wishlist = ({ setOpenWishlist }) => {
   const cartData = [
@@ -29,7 +30,13 @@ const Wishlist = ({ setOpenWishlist }) => {
   ];
 
   return (
-    <div className="fixed top-0 right-0 z-10 h-screen w-full bg-[#0000004b]">
+    <motion.div
+      initial={{ opacity: 1, x: 450 }} // Atur posisi awal dan opasitas
+      animate={{ opacity: 1, x: 0 }} // Atur posisi akhir dan opasitas saat komponen dimount
+      exit={{ opacity: 1, x: 450 }} // Atur posisi dan opasitas saat komponen di-unmount
+      transition={{ duration: 0.8 }}
+      className="fixed top-0 right-0 z-10 h-screen w-full "
+    >
       <div className="fixed top-0 right-0 min-h-full w-[30%] bg-white flex flex-col justify-between shadow-sm">
         <div>
           <div className="flex w-full justify-end pt-5  pr-5">
@@ -56,7 +63,7 @@ const Wishlist = ({ setOpenWishlist }) => {
         </div>
         {/* checkout button  */}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -72,7 +79,7 @@ const WishlistSingle = ({ data }) => {
         />
         <div className="pl-[5px]">
           <h1>{data.name}</h1>
-          <h4 className="font-[400] text-[15px] text-[red]">
+          <h4 className="font-bold text-[15px] text-[#3321c8] ">
             {new Intl.NumberFormat("id-ID", {
               style: "currency",
               currency: "IDR",
