@@ -1,24 +1,15 @@
-// import { useDispatch } from "react-redux";
-// import { Logout } from "../store/actions/authAct";
+
 
 import ProfileSideBar from "./ProfileSideBar";
 import HeaderC from "../HeaderC";
 import { shallowEqual, useSelector } from "react-redux";
 
-// import { useNavigate } from "react-router-dom";
 
 const ProfileLayout = ({ children, active }) => {
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
+
 
   const { openSidebar } = useSelector((state) => state.component, shallowEqual);
 
-  // const handleLogout = async () => {
-  //   const success = await dispatch(Logout());
-  //   if (success) {
-  //     navigate("/login");
-  //   }
-  // };
 
   return (
     <div className="felx flex-col">

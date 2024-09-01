@@ -29,11 +29,11 @@ const ProductPage = () => {
     const params = {
       q,
       page: skip,
-      tags: selectedTags,
-      categories: selectedCategories,
+      "tags[]": selectedTags,
+      "categories[]": selectedCategories,
     };
     setSearchParams(params);
-  }, [q, skip, selectedTags, selectedCategories, setSearchParams]);
+  }, [q, skip, selectedTags, selectedCategories]);
 
   useEffect(() => {
     dispatch(
@@ -41,7 +41,7 @@ const ProductPage = () => {
         tags: selectedTags,
         category: selectedCategories,
         skip: skip,
-        limit: 8, // Atur sesuai kebutuhan
+        limit: 3,
         q: q,
       })
     );

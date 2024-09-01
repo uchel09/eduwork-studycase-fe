@@ -80,7 +80,7 @@ const HeaderC = ({
               {categories?.map((ctg, i) => (
                 <div
                   key={i}
-                  className={`px-4 py-2 border border-[#2962ff] rounded-full cursor-pointer ${
+                  className={`px-4 py-2 border border-[#2962ff] rounded-full hover:bg-[#2962ff] hover:text-white cursor-pointer ${
                     isPathProduct && isCtgInCategories(ctg?.name)
                       ? "bg-[#2962ff] text-white"
                       : "bg-[white] text-[#2962ff]"
@@ -95,7 +95,7 @@ const HeaderC = ({
               {tags?.map((tag, i) => (
                 <div
                   key={i}
-                  className={`px-4 py-2 border border-[#2962ff] rounded-full cursor-pointer ${
+                  className={`px-4 py-2 border border-[#2962ff] rounded-full hover:bg-[#2962ff] hover:text-white cursor-pointer ${
                     isPathProduct && isTagInTags(tag?.name)
                       ? "bg-[#2962ff] text-white"
                       : "bg-[white] text-[#2962ff]"

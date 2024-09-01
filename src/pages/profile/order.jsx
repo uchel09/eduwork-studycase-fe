@@ -16,7 +16,7 @@ export const ProfileOrder = () => {
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const res = await getDataAPI("orders", token);
+        const res = await getDataAPI("orders/user", token);
         setOrders(res.data.orders);
       } catch (error) {
         console.log(error);

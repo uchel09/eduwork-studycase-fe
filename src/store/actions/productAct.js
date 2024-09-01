@@ -47,7 +47,7 @@ export const getProductsTest =
     const params = new URLSearchParams();
 
     if (q) params.append("q", q);
-    if (skip) params.append("skip", skip);
+    if (skip) params.append("skip", skip * limit);
     if (limit) params.append("limit", limit);
     if (category.length)
       category.forEach((cat) => params.append("category[]", cat));
@@ -58,16 +58,7 @@ export const getProductsTest =
 
     dispatch(setLoadingProducts(true));
     try {
-      const { data } = await axios.get(
-        `http://localhost:8000/api/v1/products?${queryString}`,
-        {
-          headers: {
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache",
-            Expires: "0",
-          },
-        }
-      );
+      const { data } = await getDataAPINT(`products?${queryString}`);
 
       dispatch(setGetProducts(data.products));
       dispatch(setTotalPages(data.totalPages));

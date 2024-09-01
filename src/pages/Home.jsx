@@ -1,7 +1,7 @@
 import HeaderC from "../components/Layouts/HeaderC";
 
-import BestDeals from "../components/Routes/BestDeals";
-import FeaturedProduct from "../components/Routes/FeaturedProduct";
+// import BestDeals from "../components/Routes/BestDeals";
+// import FeaturedProduct from "../components/Routes/FeaturedProduct";
 import Events from "../components/Routes/Events";
 import Sponsored from "../components/Routes/Sponsored";
 import Footer from "../components/Layouts/Footer";
@@ -22,9 +22,9 @@ function HomePage() {
         </Link>
       </section>
       <Slider2 />
-      <BestDeals />
+
       <Events />
-      <FeaturedProduct />
+
       <Sponsored />
       <Footer />
     </div>
